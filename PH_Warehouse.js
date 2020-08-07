@@ -6,10 +6,10 @@
  @version 1.2.1
  @date 05/30/2016
 
- ---------------------------------------------------------------------------------------
+ --------------------------------------------------------------------------------
  This work is licensed under the Creative Commons Attribution 4.0 International License.
  To view a copy of this license, visit http://creativecommons.org/licenses/by/4.0/
- ---------------------------------------------------------------------------------------
+ --------------------------------------------------------------------------------
 
  @param ---Options---
  @desc Use the spaces below to customize the options of the plugin
@@ -52,7 +52,7 @@
  Check out an illustrative example of using the commands and rules at: http://forums.rpgmakerweb.com/index.php?/topic/50503-ph-warehousestorage/
  Check out the portuguese example at: http://www.mundorpgmaker.com.br/topic/114053-ph-warehousestorage/
 
- ----------------------------------------------------------------------------------------------------------------------------------
+ ---------------------------------------------------------------------------------------------------------------------------
 
  Plugin Commands:
 
@@ -77,7 +77,7 @@
  - PHWarehouse capacity increase <Title of the Warehouse:quantity>  # Increase the maximum capacity for a warehouse already created
  - PHWarehouse capacity decrease <Title of the Warehouse:quantity>  # Decrease the maximum capacity for a warehouse already created
 
-----------------------------------------------------------------------------------------------------------------------------------
+---------------------------------------------------------------------------------------------------------------------------
 
 Script Commands:
 
@@ -91,7 +91,7 @@ Script Commands:
  - PHPlugins.PHWarehouse.prototype.hasArmor("Title of the Warehouse", id);                         # Verifies if a warehouse has a particular armor and returns the quantity of this item inside the warehouse
  - PHPlugins.PHWarehouse.prototype.hasKeyItem("Title of the Warehouse", id);                       # Verifies if a warehouse has a particular key item and returns the quantity of this item inside the warehouse
 
- ----------------------------------------------------------------------------------------------------------------------------------
+ ---------------------------------------------------------------------------------------------------------------------------
 
 Rule Commands:
 
@@ -129,6 +129,212 @@ Rule Commands:
     keyItem-n: 1 (Allows the storage of any key item except the one with id 1)
     (If you don't specify the command "keyItem" in the rule, all key items will be allowed to be stored)
 
+ */
+
+/*:ja
+ *
+ * PH - Warehouse/Storage
+ * @plugindesc アイテムを保管できる倉庫を作成できます。
+ *
+ * @author PrimeHover
+ * @version 1.2.1
+ * @date 05/30/2016
+ *
+ * ---------------------------------------------------------------------------
+ * この作品は、Creative Commons Attribution 4.0 International License の下で
+ * ライセンスされています。
+ * このライセンスを確認するには、次をご覧ください。
+ * https://creativecommons.org/licenses/by/4.0/deed.ja
+ * ---------------------------------------------------------------------------
+ *
+ * @param ---オプション---
+ * @desc プラグインのオプションをカスタマイズしてください
+ * @default
+ *
+ * @param All Together
+ * @text カテゴリ分け
+ * @desc アイテムを別々のカテゴリに分けて表示
+ * 0:カテゴリ分け / 1:統合
+ * @default 0
+ *
+ * @param Stack Item Quantity
+ * @text 容量基準
+ * @desc 同じアイテムの複数を容量の1つの容量と見なすかどうか
+ * 0:1個で1容量 / 1:1種類で1容量
+ * @default 0
+ *
+ * @param ---表示テキスト---
+ * @desc プラグインのテキストをカスタマイズしてください
+ * @default
+ *
+ * @param Withdraw Text
+ * @text 引き出すテキスト
+ * @desc オプション "Withdraw"の表示テキスト
+ * @default 引き出す
+ *
+ * @param Deposit Text
+ * @text 預けるテキスト
+ * @desc オプション "Deposit"の表示テキスト
+ * @default 預ける
+ *
+ * @param All Text
+ * @text 全てテキスト
+ * @desc オプション "All"の表示テキスト("All Together"がtrueに設定されている場合のみ)
+ * @default 全て
+ *
+ * @param Available Space Text
+ * @text 利用可能容量テキスト
+ * @desc 情報ウィンドウの表示テキスト
+ * @default 利用可能容量:
+ *
+ * @help
+ *
+ * Warehouse/Storage Plugin
+ * 作者: PrimeHover
+ *
+ * 詳細説明: https://github.com/PrimeHover/Warehouse
+ * 次のURLにあるコマンドとルールの使用例を確認してください。
+ * http://forums.rpgmakerweb.com/index.php?/topic/50503-ph-warehousestorage/
+ * ポルトガル語の例を確認してください。
+ * http://www.mundorpgmaker.com.br/topic/114053-ph-warehousestorage/
+ *
+ * 翻訳:ムノクラ
+ * https://fungamemake.com/
+ * https://twitter.com/munokura/
+ *
+ * ---------------------------------------------------------------------------
+ *
+ * プラグインコマンド
+ *
+ * - PHWarehouse create <預かり所の名前>
+ *     # 倉庫を作成
+ * - PHWarehouse create <預かり所の名前:50>
+ *     # 倉庫を作成し、その最大容量を50に設定
+ * - PHWarehouse create <預かり所の名前:50:rule>
+ *     # 倉庫を作成し、最大容量を50に設定し、ルールを設定
+ *
+ * - PHWarehouse show <預かり所の名前>
+ *     # 倉庫を表示
+ * - PHWarehouse remove <預かり所の名前>
+ *     # 倉庫を削除
+ * - PHWarehouse loot item <預かり所の名前:id:容量数>
+ *     # 作成した倉庫内に戦利品ボーナス用のアイテムを追加
+ * - PHWarehouse loot weapon <預かり所の名前:id:容量数>
+ *     # 作成した倉庫内に戦利品ボーナス用の武器を追加
+ * - PHWarehouse loot armor <預かり所の名前:id:容量数>
+ *     # 作成した倉庫内に戦利品ボーナス用の防具を追加
+ * - PHWarehouse loot keyItem <預かり所の名前:id:容量数>
+ *     # 作成した倉庫内に戦利品ボーナスの大事なものを追加
+ *
+ * - PHWarehouse add item <預かり所の名前:id:容量数>
+ *     # 作成した倉庫内にアイテムを追加
+ * - PHWarehouse add weapon <預かり所の名前:id:容量数>
+ *     # 作成した倉庫内に武器を追加
+ * - PHWarehouse add armor <預かり所の名前:id:容量数>
+ *     # 作成した倉庫内に防具を追加
+ * - PHWarehouse add keyItem <預かり所の名前:id:容量数>
+ *     # 作成した倉庫内に大事なものを追加
+ *
+ * - PHWarehouse capacity set <預かり所の名前:容量数>
+ *     # 既に作成されている倉庫の新しい最大容量を設定
+ * - PHWarehouse capacity increase <預かり所の名前:容量数>
+ *     # 既に作成されている倉庫の最大容量を増やす
+ * - PHWarehouse capacity decrease <預かり所の名前:容量数>
+ *     # 既に作成されている倉庫の最大容量を減らす
+ *
+ * ---------------------------------------------------------------------------
+ *
+ * スクリプトコマンド
+ *
+ * - PHPlugins.PHWarehouse.prototype.exist("預かり所の名前");
+ *      # 倉庫が存在するかどうかを確認
+ *
+ * - PHPlugins.PHWarehouse.prototype.getMaxCapacity("預かり所の名前");
+ *      # 倉庫の最大容量を取得
+ * - PHPlugins.PHWarehouse.prototype.getCurrentCapacity("預かり所の名前");
+ *      # 倉庫の現在の容量を取得
+ *
+ * - PHPlugins.PHWarehouse.prototype.hasItem("預かり所の名前", id);
+ *      # 倉庫に特定のアイテムの数量を返す
+ * - PHPlugins.PHWarehouse.prototype.hasWeapon("預かり所の名前", id);
+ *      # 倉庫に特定の武器の数量を返す
+ * - PHPlugins.PHWarehouse.prototype.hasArmor("預かり所の名前", id);
+ *      # 倉庫に特定の防具の数量を返す
+ * - PHPlugins.PHWarehouse.prototype.hasKeyItem("預かり所の名前", id);
+ *      # 倉庫に特定の大事なものの数量を返す
+ *
+ * ---------------------------------------------------------------------------
+ *
+ * ルール
+ *
+ * ルールは、特定の倉庫に保管できるアイテムを管理するための簡単な方法です。
+ *
+ * 倉庫の規則を作成するために、
+ * "PHWarehouse"と呼ばれるデータベースの中に
+ * コモンイベントを作成しなければなりません。
+ * そのコモンイベントの中で、
+ * 倉庫に関する規則を取り込むためにいくつかのメモタグを作成。
+ *
+ * これらのメモタグは次の形式でなければなりません。
+ *
+ * {Title of the Rule}
+ * [commands]
+ *
+ * 指定できる[commands]は次のとおりです。
+ *
+ * item: 1
+ *   (アイテムIDが1の保管を許可)
+ *
+ * item: 1, 2, 3, 4
+ *   (IDが1、2、3、4のアイテムを保管を許可)
+ *
+ * item: no
+ *   (アイテムの保管を禁止)
+ *
+ * item-n: 1
+ *   (IDが1のアイテム以外のアイテムの保管を許可)
+ *   (ルールで'item'というコマンドを指定しなければ、
+ *    全てのアイテムを保管を許可します)
+ *
+ * weapon: 1
+ *   (ID 1の武器を保管を許可)
+ *
+ * weapon: 1, 2, 3, 4
+ *   (ID 1、2、3、4の武器を保管を許可)
+ *
+ * weapon: no
+ *   (武器の保管を拒否)
+ *
+ * weapon-n: 1
+ *   (IDが1の武器以外の武器の保管を許可)
+ *   (ルールで "weapon"コマンドを指定しない場合、全ての武器を保管を許可)
+ *
+ * armor: 1
+ *   (ID 1の防具の保管を許可)
+ *
+ * armor: 1, 2, 3, 4
+ *   (id 1、2、3、4の防具を保管可能)
+ *
+ * armor: no
+ *   (防具の保管を拒否)
+ *
+ * armor-n: 1
+ *   (IDが1の防具を除く全ての防具を保管可能)
+ *   (ルールで"armor"コマンドを指定しない場合、全ての防具の保管を許可)
+ *
+ * keyItem: 1
+ *   (ID 1の大事なものの保管を許可)
+ *
+ * keyItem: 1, 2, 3, 4
+ *   (IDが1、2、3、4の大事なものを保管を許可)
+ *
+ * keyItem: no
+ *   (大事なものの保管を禁止)
+ *
+ * keyItem-n: 1
+ *   (IDが1のものを除く全ての大事なものの保管を許可)
+ *   (ルール内でコマンド"keyItem"を指定しない場合、
+ *    全ての大事なものの保管を許可)
  */
 
 /* Global variable for PH Plugins */
