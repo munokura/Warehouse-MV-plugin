@@ -132,21 +132,12 @@ Rule Commands:
  */
 
 /*:ja
- *
- * PH - Warehouse/Storage
  * @plugindesc アイテムを保管できる倉庫を作成できます。
  *
  * @author PrimeHover
  * @version 1.2.1
  * @date 05/30/2016
- *
- * ---------------------------------------------------------------------------
- * この作品は、Creative Commons Attribution 4.0 International License の下で
- * ライセンスされています。
- * このライセンスを確認するには、次をご覧ください。
- * https://creativecommons.org/licenses/by/4.0/deed.ja
- * ---------------------------------------------------------------------------
- *
+ * 
  * @param ---オプション---
  * @desc プラグインのオプションをカスタマイズしてください
  * @default
@@ -188,7 +179,6 @@ Rule Commands:
  * @default 利用可能容量:
  *
  * @help
- *
  * Warehouse/Storage Plugin
  * 作者: PrimeHover
  *
@@ -201,6 +191,9 @@ Rule Commands:
  * 翻訳:ムノクラ
  * https://fungamemake.com/
  * https://twitter.com/munokura/
+ * 
+ * 注意事項
+ * このプラグインは導入前のセーブデータをロードすると、エラーが起きます。
  *
  * ---------------------------------------------------------------------------
  *
@@ -335,6 +328,15 @@ Rule Commands:
  *   (IDが1のものを除く全ての大事なものの保管を許可)
  *   (ルール内でコマンド"keyItem"を指定しない場合、
  *    全ての大事なものの保管を許可)
+ * 
+ * 
+ * 利用規約
+ * 
+ * この作品は、Creative Commons Attribution 4.0 International License の下で
+ * ライセンスされています。
+ * このライセンスを確認するには、次をご覧ください。
+ * https://creativecommons.org/licenses/by/4.0/deed.ja
+ * 
  */
 
 /* Global variable for PH Plugins */
@@ -355,7 +357,7 @@ PHPlugins.Params.PHWarehouseStackItemQuantity = Number(PHPlugins.Parameters['Sta
 PHPlugins.Params.PHWarehouseAllTogether = Boolean(PHPlugins.Params.PHWarehouseAllTogether);
 PHPlugins.Params.PHWarehouseStackItemQuantity = Boolean(PHPlugins.Params.PHWarehouseStackItemQuantity);
 
-(function() {
+(function () {
 
     /* ---------------------------------------------------------- *
      *                      WAREHOUSE MANAGER                     *
@@ -372,7 +374,7 @@ PHPlugins.Params.PHWarehouseStackItemQuantity = Boolean(PHPlugins.Params.PHWareh
     /* ---- BASIC OPERATIONS ---- */
 
     /* Creates a warehouse if it does not exist */
-    PHWarehouseManager.prototype.createWarehouse = function(_sentence) {
+    PHWarehouseManager.prototype.createWarehouse = function (_sentence) {
 
         var matches = this.checkSentence(_sentence);
         var results;
@@ -423,7 +425,7 @@ PHPlugins.Params.PHWarehouseStackItemQuantity = Boolean(PHPlugins.Params.PHWareh
     };
 
     /* Opens a warehouse */
-    PHWarehouseManager.prototype.openWarehouse = function(_sentence) {
+    PHWarehouseManager.prototype.openWarehouse = function (_sentence) {
         var matches = this.checkSentence(_sentence);
         if (matches != null) {
             this._lastActive = matches;
@@ -432,7 +434,7 @@ PHPlugins.Params.PHWarehouseStackItemQuantity = Boolean(PHPlugins.Params.PHWareh
     };
 
     /* Remove a warehouse */
-    PHWarehouseManager.prototype.removeWarehouse = function(_sentence) {
+    PHWarehouseManager.prototype.removeWarehouse = function (_sentence) {
 
         var matches = this.checkSentence(_sentence);
 
@@ -445,7 +447,7 @@ PHPlugins.Params.PHWarehouseStackItemQuantity = Boolean(PHPlugins.Params.PHWareh
     };
 
     /* Add a loot bonus */
-    PHWarehouseManager.prototype.addLoot = function(_sentence, category) {
+    PHWarehouseManager.prototype.addLoot = function (_sentence, category) {
 
         var matches = this.checkSentence(_sentence);
         var results;
@@ -472,7 +474,7 @@ PHPlugins.Params.PHWarehouseStackItemQuantity = Boolean(PHPlugins.Params.PHWareh
     };
 
     /* Add item to a warehouse */
-    PHWarehouseManager.prototype.addItems = function(_sentence, category) {
+    PHWarehouseManager.prototype.addItems = function (_sentence, category) {
 
         var matches = this.checkSentence(_sentence);
         var results;
@@ -504,7 +506,7 @@ PHPlugins.Params.PHWarehouseStackItemQuantity = Boolean(PHPlugins.Params.PHWareh
     /* ---- RULE METHODS ---- */
 
     /* Load rules */
-    PHWarehouseManager.prototype.loadRules = function() {
+    PHWarehouseManager.prototype.loadRules = function () {
         var warehouseVar = null;
 
         if ($dataCommonEvents) {
@@ -522,7 +524,7 @@ PHPlugins.Params.PHWarehouseStackItemQuantity = Boolean(PHPlugins.Params.PHWareh
     };
 
     /* Populate rules */
-    PHWarehouseManager.prototype.populateRules = function(warehouseVar) {
+    PHWarehouseManager.prototype.populateRules = function (warehouseVar) {
         var str = '';
         var index = -1;
         var rule;
@@ -531,7 +533,7 @@ PHPlugins.Params.PHWarehouseStackItemQuantity = Boolean(PHPlugins.Params.PHWareh
             if (warehouseVar[i].parameters[0]) {
                 str = warehouseVar[i].parameters[0].trim();
                 if (this.checkTitle(str)) {
-                    str = str.slice(1, str.length-1);
+                    str = str.slice(1, str.length - 1);
                     this._rules[str] = {
                         enabledItems: {
                             item: [],
@@ -572,7 +574,7 @@ PHPlugins.Params.PHWarehouseStackItemQuantity = Boolean(PHPlugins.Params.PHWareh
     };
 
     /* Checks if the string is a title or a description */
-    PHWarehouseManager.prototype.checkTitle = function(str) {
+    PHWarehouseManager.prototype.checkTitle = function (str) {
         if (str.charAt(0) == "{" && str.charAt(str.length - 1) == "}") {
             return true;
         }
@@ -580,7 +582,7 @@ PHPlugins.Params.PHWarehouseStackItemQuantity = Boolean(PHPlugins.Params.PHWareh
     };
 
     /* Separate ids and make it an array */
-    PHWarehouseManager.prototype.getItemsId = function(str) {
+    PHWarehouseManager.prototype.getItemsId = function (str) {
         var arr = str.split(",");
         for (var i = 0; i < arr; i++) {
             arr[i] = parseInt(arr[i], 10);
@@ -589,7 +591,7 @@ PHPlugins.Params.PHWarehouseStackItemQuantity = Boolean(PHPlugins.Params.PHWareh
     };
 
     /* Checks if items are enabled */
-    PHWarehouseManager.prototype.isItemEnabled = function() {
+    PHWarehouseManager.prototype.isItemEnabled = function () {
         if (this._warehouses[this._lastActive].rule == null || (this._rules.hasOwnProperty(this._warehouses[this._lastActive].rule) && Array.isArray(this._rules[this._warehouses[this._lastActive].rule].enabledItems.item))) {
             return true;
         }
@@ -597,7 +599,7 @@ PHPlugins.Params.PHWarehouseStackItemQuantity = Boolean(PHPlugins.Params.PHWareh
     };
 
     /* Checks if weapons are enabled */
-    PHWarehouseManager.prototype.isWeaponEnabled = function() {
+    PHWarehouseManager.prototype.isWeaponEnabled = function () {
         if (this._warehouses[this._lastActive].rule == null || (this._rules.hasOwnProperty(this._warehouses[this._lastActive].rule) && Array.isArray(this._rules[this._warehouses[this._lastActive].rule].enabledItems.weapon))) {
             return true;
         }
@@ -605,7 +607,7 @@ PHPlugins.Params.PHWarehouseStackItemQuantity = Boolean(PHPlugins.Params.PHWareh
     };
 
     /* Checks if armors are enabled */
-    PHWarehouseManager.prototype.isArmorEnabled = function() {
+    PHWarehouseManager.prototype.isArmorEnabled = function () {
         if (this._warehouses[this._lastActive].rule == null || (this._rules.hasOwnProperty(this._warehouses[this._lastActive].rule) && Array.isArray(this._rules[this._warehouses[this._lastActive].rule].enabledItems.armor))) {
             return true;
         }
@@ -613,7 +615,7 @@ PHPlugins.Params.PHWarehouseStackItemQuantity = Boolean(PHPlugins.Params.PHWareh
     };
 
     /* Checks if key items are enabled */
-    PHWarehouseManager.prototype.isKeyItemEnabled = function() {
+    PHWarehouseManager.prototype.isKeyItemEnabled = function () {
         if (this._warehouses[this._lastActive].rule == null || (this._rules.hasOwnProperty(this._warehouses[this._lastActive].rule) && Array.isArray(this._rules[this._warehouses[this._lastActive].rule].enabledItems.keyItem))) {
             return true;
         }
@@ -621,14 +623,14 @@ PHPlugins.Params.PHWarehouseStackItemQuantity = Boolean(PHPlugins.Params.PHWareh
     };
 
     /* Verifies if an item is allowed to be withdrawn or deposited */
-    PHWarehouseManager.prototype.verifyItem = function(item) {
+    PHWarehouseManager.prototype.verifyItem = function (item) {
         if (item == undefined) return false;
         this.verifyAllTogether(item);
         if (this._warehouses[this._lastActive].rule == null ||
-                (this._rules.hasOwnProperty(this._warehouses[this._lastActive].rule) &&
+            (this._rules.hasOwnProperty(this._warehouses[this._lastActive].rule) &&
                 Array.isArray(this._rules[this._warehouses[this._lastActive].rule].enabledItems[this._lastCategory]) &&
-                    (this._rules[this._warehouses[this._lastActive].rule].enabledItems[this._lastCategory].indexOf(item.id) > -1) ||
-                    this._rules[this._warehouses[this._lastActive].rule].enabledItems[this._lastCategory].length == 0)) {
+                (this._rules[this._warehouses[this._lastActive].rule].enabledItems[this._lastCategory].indexOf(item.id) > -1) ||
+                this._rules[this._warehouses[this._lastActive].rule].enabledItems[this._lastCategory].length == 0)) {
 
             /* Makes a second checking to see if this item is disabled */
             if (this._warehouses[this._lastActive].rule !== null &&
@@ -642,7 +644,7 @@ PHPlugins.Params.PHWarehouseStackItemQuantity = Boolean(PHPlugins.Params.PHWareh
     };
 
     /* Changes the last category if "all together" are set as true */
-    PHWarehouseManager.prototype.verifyAllTogether = function(item) {
+    PHWarehouseManager.prototype.verifyAllTogether = function (item) {
         if (PHPlugins.Params.PHWarehouseAllTogether == true) {
             if (DataManager.isItem(item) && item.itypeId === 1) {
                 this._lastCategory = 'item';
@@ -657,14 +659,14 @@ PHPlugins.Params.PHWarehouseStackItemQuantity = Boolean(PHPlugins.Params.PHWareh
     };
 
     /* Undo what the previous function has done */
-    PHWarehouseManager.prototype.undoAllTogetherVerification = function() {
+    PHWarehouseManager.prototype.undoAllTogetherVerification = function () {
         if (PHPlugins.Params.PHWarehouseAllTogether == true) {
             this._lastCategory = 'all';
         }
     };
 
     /* Changes the maximum capacity of the warehouse for the given title */
-    PHWarehouseManager.prototype.setMaxCapacity = function(_sentence) {
+    PHWarehouseManager.prototype.setMaxCapacity = function (_sentence) {
         var matches = this.checkSentence(_sentence);
         if (matches != null) {
             var results = matches.split(":");
@@ -682,7 +684,7 @@ PHPlugins.Params.PHWarehouseStackItemQuantity = Boolean(PHPlugins.Params.PHWareh
     };
 
     /* Increases the maximum capacity of the warehouse for the given title */
-    PHWarehouseManager.prototype.increaseMaxCapacity = function(_sentence) {
+    PHWarehouseManager.prototype.increaseMaxCapacity = function (_sentence) {
         var matches = this.checkSentence(_sentence);
         if (matches != null) {
             var results = matches.split(":");
@@ -700,7 +702,7 @@ PHPlugins.Params.PHWarehouseStackItemQuantity = Boolean(PHPlugins.Params.PHWareh
     };
 
     /* Decreases the maximum capacity of the warehouse for the given title */
-    PHWarehouseManager.prototype.decreaseMaxCapacity = function(_sentence) {
+    PHWarehouseManager.prototype.decreaseMaxCapacity = function (_sentence) {
         var matches = this.checkSentence(_sentence);
         if (matches != null) {
             var results = matches.split(":");
@@ -722,7 +724,7 @@ PHPlugins.Params.PHWarehouseStackItemQuantity = Boolean(PHPlugins.Params.PHWareh
     /* ---- MANAGEMENT METHODS ---- */
 
     /* Get all the items from the current warehouse */
-    PHWarehouseManager.prototype.getItems = function() {
+    PHWarehouseManager.prototype.getItems = function () {
         var totalItems = this.getCommonItems();
         totalItems = totalItems.concat(this.getArmors());
         totalItems = totalItems.concat(this.getKeyItems());
@@ -731,7 +733,7 @@ PHPlugins.Params.PHWarehouseStackItemQuantity = Boolean(PHPlugins.Params.PHWareh
     };
 
     /* Get weapon items */
-    PHWarehouseManager.prototype.getWeapons = function() {
+    PHWarehouseManager.prototype.getWeapons = function () {
         var totalItems = [];
         for (var i = 0; i < this._warehouses[this._lastActive].items.weapon.length; i++) {
             for (var j = 0; j < $dataWeapons.length; j++) {
@@ -744,7 +746,7 @@ PHPlugins.Params.PHWarehouseStackItemQuantity = Boolean(PHPlugins.Params.PHWareh
     };
 
     /* Get common items */
-    PHWarehouseManager.prototype.getCommonItems = function() {
+    PHWarehouseManager.prototype.getCommonItems = function () {
         var totalItems = [];
         for (var i = 0; i < this._warehouses[this._lastActive].items.item.length; i++) {
             for (var j = 0; j < $dataItems.length; j++) {
@@ -757,7 +759,7 @@ PHPlugins.Params.PHWarehouseStackItemQuantity = Boolean(PHPlugins.Params.PHWareh
     };
 
     /* Get armor items */
-    PHWarehouseManager.prototype.getArmors = function() {
+    PHWarehouseManager.prototype.getArmors = function () {
         var totalItems = [];
         for (var i = 0; i < this._warehouses[this._lastActive].items.armor.length; i++) {
             for (var j = 0; j < $dataArmors.length; j++) {
@@ -770,7 +772,7 @@ PHPlugins.Params.PHWarehouseStackItemQuantity = Boolean(PHPlugins.Params.PHWareh
     };
 
     /* Get key items */
-    PHWarehouseManager.prototype.getKeyItems = function() {
+    PHWarehouseManager.prototype.getKeyItems = function () {
         var totalItems = [];
         for (var i = 0; i < this._warehouses[this._lastActive].items.keyItem.length; i++) {
             for (var j = 0; j < $dataItems.length; j++) {
@@ -783,7 +785,7 @@ PHPlugins.Params.PHWarehouseStackItemQuantity = Boolean(PHPlugins.Params.PHWareh
     };
 
     /* Get the quantity for the corresponding item */
-    PHWarehouseManager.prototype.getQuantity = function(item) {
+    PHWarehouseManager.prototype.getQuantity = function (item) {
         this.verifyAllTogether(item);
         var qtty = this._warehouses[this._lastActive].qtty[this._lastCategory][item.id];
         this.undoAllTogetherVerification();
@@ -791,7 +793,7 @@ PHPlugins.Params.PHWarehouseStackItemQuantity = Boolean(PHPlugins.Params.PHWareh
     };
 
     /* Checks whether or not the warehouse is already full */
-    PHWarehouseManager.prototype.checkCapacity = function() {
+    PHWarehouseManager.prototype.checkCapacity = function () {
         var capacity = this.getCurrentCapacity(this._lastActive);
         if (capacity < this._warehouses[this._lastActive].maxCapacity) {
             return true;
@@ -804,7 +806,7 @@ PHPlugins.Params.PHWarehouseStackItemQuantity = Boolean(PHPlugins.Params.PHWareh
     /* ---- OPERATION METHODS ---- */
 
     /* Deposit on warehouse */
-    PHWarehouseManager.prototype.deposit = function(item) {
+    PHWarehouseManager.prototype.deposit = function (item) {
         if (this.checkCapacity()) {
 
             this.verifyAllTogether(item);
@@ -829,7 +831,7 @@ PHPlugins.Params.PHWarehouseStackItemQuantity = Boolean(PHPlugins.Params.PHWareh
     };
 
     /* Withdraw from a warehouse */
-    PHWarehouseManager.prototype.withdraw = function(item) {
+    PHWarehouseManager.prototype.withdraw = function (item) {
 
         this.verifyAllTogether(item);
 
@@ -859,7 +861,7 @@ PHPlugins.Params.PHWarehouseStackItemQuantity = Boolean(PHPlugins.Params.PHWareh
     /* ---- INTERNAL METHODS ---- */
 
     /* Check sentences coming from the arguments */
-    PHWarehouseManager.prototype.checkSentence = function(_sentence) {
+    PHWarehouseManager.prototype.checkSentence = function (_sentence) {
         var regExp = /\<([^)]+)\>/;
         var matches = regExp.exec(_sentence);
         if (matches != null) {
@@ -870,7 +872,7 @@ PHPlugins.Params.PHWarehouseStackItemQuantity = Boolean(PHPlugins.Params.PHWareh
     };
 
     /* Main method for checking items inside warehouses */
-    PHWarehouseManager.prototype.hasItems = function(title, id, category) {
+    PHWarehouseManager.prototype.hasItems = function (title, id, category) {
         if (this._warehouses.hasOwnProperty(title) && this._warehouses[title].items[category].indexOf(id) > -1) {
             return this._warehouses[title].qtty[category][id];
         }
@@ -882,7 +884,7 @@ PHPlugins.Params.PHWarehouseStackItemQuantity = Boolean(PHPlugins.Params.PHWareh
     /* ---- ACCESSOR METHODS ---- */
 
     /* Return the value of the maximum capacity of the warehouse for the given title */
-    PHWarehouseManager.prototype.getMaxCapacity = function(title) {
+    PHWarehouseManager.prototype.getMaxCapacity = function (title) {
         if (this._warehouses.hasOwnProperty(title)) {
             return this._warehouses[title].maxCapacity;
         }
@@ -890,7 +892,7 @@ PHPlugins.Params.PHWarehouseStackItemQuantity = Boolean(PHPlugins.Params.PHWareh
     };
 
     /* Return the value of the quantity of items in the warehouse for the given title */
-    PHWarehouseManager.prototype.getCurrentCapacity = function(title) {
+    PHWarehouseManager.prototype.getCurrentCapacity = function (title) {
         if (this._warehouses.hasOwnProperty(title)) {
             if (PHPlugins.Params.PHWarehouseStackItemQuantity == true) {
                 return (this._warehouses[title].items.item.length + this._warehouses[title].items.weapon.length + this._warehouses[title].items.keyItem.length + this._warehouses[title].items.armor.length);
@@ -902,7 +904,7 @@ PHPlugins.Params.PHWarehouseStackItemQuantity = Boolean(PHPlugins.Params.PHWareh
     };
 
     /* Return whether or not the warehouse for the given title exists */
-    PHWarehouseManager.prototype.exist = function(title) {
+    PHWarehouseManager.prototype.exist = function (title) {
         if (this._warehouses.hasOwnProperty(title) && this._warehouses[title] !== undefined) {
             return true;
         }
@@ -910,22 +912,22 @@ PHPlugins.Params.PHWarehouseStackItemQuantity = Boolean(PHPlugins.Params.PHWareh
     };
 
     /* Checks if the given warehouse has an item */
-    PHWarehouseManager.prototype.hasItem = function(title, id) {
+    PHWarehouseManager.prototype.hasItem = function (title, id) {
         return this.hasItems(title, id, 'item');
     };
 
     /* Checks if the given warehouse has a weapon */
-    PHWarehouseManager.prototype.hasWeapon = function(title, id) {
+    PHWarehouseManager.prototype.hasWeapon = function (title, id) {
         return this.hasItems(title, id, 'weapon');
     };
 
     /* Checks if the given warehouse has an armor */
-    PHWarehouseManager.prototype.hasArmor = function(title, id) {
+    PHWarehouseManager.prototype.hasArmor = function (title, id) {
         return this.hasItems(title, id, 'armor');
     };
 
     /* Checks if the given warehouse has a key item */
-    PHWarehouseManager.prototype.hasKeyItem = function(title, id) {
+    PHWarehouseManager.prototype.hasKeyItem = function (title, id) {
         return this.hasItems(title, id, 'keyItem');
     };
 
@@ -937,7 +939,7 @@ PHPlugins.Params.PHWarehouseStackItemQuantity = Boolean(PHPlugins.Params.PHWareh
 
     /* Creating PHWarehouse variable after loading the whole database */
     var _DataManager_createGameObjects_ = DataManager.createGameObjects;
-    DataManager.createGameObjects = function() {
+    DataManager.createGameObjects = function () {
         _DataManager_createGameObjects_.call(this);
         PHPlugins.PHWarehouse = new PHWarehouseManager();
         PHPlugins.PHWarehouse.loadRules();
@@ -945,7 +947,7 @@ PHPlugins.Params.PHWarehouseStackItemQuantity = Boolean(PHPlugins.Params.PHWareh
 
     /* Saves the warehouses when the player saves the game */
     var _DataManager_makeSaveContents_ = DataManager.makeSaveContents;
-    DataManager.makeSaveContents = function() {
+    DataManager.makeSaveContents = function () {
         var contents = _DataManager_makeSaveContents_.call(this);
         contents.phwarehouse = PHPlugins.PHWarehouse._warehouses;
         return contents;
@@ -953,23 +955,23 @@ PHPlugins.Params.PHWarehouseStackItemQuantity = Boolean(PHPlugins.Params.PHWareh
 
     /* Retrieve the warehouses from the save content */
     var _DataManager_extractSaveContents_ = DataManager.extractSaveContents;
-    DataManager.extractSaveContents = function(contents) {
+    DataManager.extractSaveContents = function (contents) {
         _DataManager_extractSaveContents_.call(this, contents);
         PHPlugins.PHWarehouse = new PHWarehouseManager();
         PHPlugins.PHWarehouse._warehouses = contents.phwarehouse;
         PHPlugins.PHWarehouse.loadRules();
     };
 
-    var getAllArguments = function(args, startIndex) {
+    var getAllArguments = function (args, startIndex) {
         var str = args[startIndex].toString();
-        for (var i = (startIndex+1); i < args.length; i++) {
+        for (var i = (startIndex + 1); i < args.length; i++) {
             str += ' ' + args[i].toString();
         }
         return str;
     };
 
     var _Game_Interpreter_pluginCommand = Game_Interpreter.prototype.pluginCommand;
-    Game_Interpreter.prototype.pluginCommand = function(command, args) {
+    Game_Interpreter.prototype.pluginCommand = function (command, args) {
         _Game_Interpreter_pluginCommand.call(this, command, args);
         if (command === 'PHWarehouse') {
             switch (args[0]) {
@@ -1044,12 +1046,12 @@ PHPlugins.Params.PHWarehouseStackItemQuantity = Boolean(PHPlugins.Params.PHWareh
     Window_WarehouseTitle.prototype = Object.create(Window_Base.prototype);
     Window_WarehouseTitle.prototype.constructor = Window_WarehouseTitle;
 
-    Window_WarehouseTitle.prototype.initialize = function() {
+    Window_WarehouseTitle.prototype.initialize = function () {
         Window_Base.prototype.initialize.call(this, 0, 0, Graphics.boxWidth, this.fittingHeight(1));
         this.refresh();
     };
 
-    Window_WarehouseTitle.prototype.refresh = function() {
+    Window_WarehouseTitle.prototype.refresh = function () {
         this.contents.clear();
         this.changeTextColor(this.crisisColor());
         this.drawText(PHPlugins.PHWarehouse._lastActive, 0, 0, Graphics.boxWidth, "center");
@@ -1063,7 +1065,7 @@ PHPlugins.Params.PHWarehouseStackItemQuantity = Boolean(PHPlugins.Params.PHWareh
     Window_WarehouseOption.prototype = Object.create(Window_Selectable.prototype);
     Window_WarehouseOption.prototype.constructor = Window_WarehouseOption;
 
-    Window_WarehouseOption.prototype.initialize = function() {
+    Window_WarehouseOption.prototype.initialize = function () {
         Window_Selectable.prototype.initialize.call(this, 0, this.fittingHeight(1), Graphics.boxWidth, this.fittingHeight(1));
         this.withdrawText = PHPlugins.Params.PHWarehouseWithdrawText;
         this.depositText = PHPlugins.Params.PHWarehouseDepositText;
@@ -1072,19 +1074,19 @@ PHPlugins.Params.PHWarehouseStackItemQuantity = Boolean(PHPlugins.Params.PHWareh
         this.activate();
     };
 
-    Window_WarehouseOption.prototype.maxItems = function() {
+    Window_WarehouseOption.prototype.maxItems = function () {
         return 2;
     };
 
-    Window_WarehouseOption.prototype.maxCols = function() {
+    Window_WarehouseOption.prototype.maxCols = function () {
         return 2;
     };
 
-    Window_WarehouseOption.prototype.changeOption = function() {
+    Window_WarehouseOption.prototype.changeOption = function () {
         PHPlugins.PHWarehouse._lastOption = this._index;
     };
 
-    Window_WarehouseOption.prototype.refresh = function() {
+    Window_WarehouseOption.prototype.refresh = function () {
         var rectWithdraw = this.itemRectForText(0);
         var rectDeposit = this.itemRectForText(1);
         this.drawText(this.withdrawText, rectWithdraw.x, rectWithdraw.y, rectWithdraw.width, "center");
@@ -1099,18 +1101,18 @@ PHPlugins.Params.PHWarehouseStackItemQuantity = Boolean(PHPlugins.Params.PHWareh
     Window_WarehouseCategory.prototype = Object.create(Window_ItemCategory.prototype);
     Window_WarehouseCategory.prototype.constructor = Window_WarehouseCategory;
 
-    Window_WarehouseCategory.prototype.initialize = function() {
+    Window_WarehouseCategory.prototype.initialize = function () {
         Window_ItemCategory.prototype.initialize.call(this);
         this.y = this.fittingHeight(3);
         this.deselect();
         this.deactivate();
     };
 
-    Window_WarehouseCategory.prototype.changeCategory = function() {
+    Window_WarehouseCategory.prototype.changeCategory = function () {
         PHPlugins.PHWarehouse._lastCategory = this.currentSymbol() || "item";
     };
 
-    Window_WarehouseCategory.prototype.maxCols = function() {
+    Window_WarehouseCategory.prototype.maxCols = function () {
         if (PHPlugins.Params.PHWarehouseAllTogether == true) {
             return 1;
         }
@@ -1130,7 +1132,7 @@ PHPlugins.Params.PHWarehouseStackItemQuantity = Boolean(PHPlugins.Params.PHWareh
         return cols;
     };
 
-    Window_WarehouseCategory.prototype.makeCommandList = function() {
+    Window_WarehouseCategory.prototype.makeCommandList = function () {
         if (PHPlugins.Params.PHWarehouseAllTogether == true) {
             this.addCommand(PHPlugins.Params.PHWarehouseAllText, 'all');
         } else {
@@ -1149,12 +1151,12 @@ PHPlugins.Params.PHWarehouseStackItemQuantity = Boolean(PHPlugins.Params.PHWareh
         }
     };
 
-    Window_WarehouseCategory.prototype.setItemWindow = function(itemWindow) {
+    Window_WarehouseCategory.prototype.setItemWindow = function (itemWindow) {
         this._itemWindow = itemWindow;
         this.update();
     };
 
-    Window_WarehouseCategory.prototype.update = function() {
+    Window_WarehouseCategory.prototype.update = function () {
         Window_ItemCategory.prototype.update.call(this);
         this.changeCategory();
         this._itemWindow.refresh();
@@ -1168,11 +1170,11 @@ PHPlugins.Params.PHWarehouseStackItemQuantity = Boolean(PHPlugins.Params.PHWareh
     Window_WarehouseItemList.prototype = Object.create(Window_ItemList.prototype);
     Window_WarehouseItemList.prototype.constructor = Window_WarehouseItemList;
 
-    Window_WarehouseItemList.prototype.initialize = function() {
+    Window_WarehouseItemList.prototype.initialize = function () {
         Window_ItemList.prototype.initialize.call(this, 0, this.fittingHeight(5), Graphics.boxWidth, Graphics.boxHeight - this.fittingHeight(7));
     };
 
-    Window_WarehouseItemList.prototype.isCurrentItemEnabled = function() {
+    Window_WarehouseItemList.prototype.isCurrentItemEnabled = function () {
         if (this._data.length > 0) {
             if (PHPlugins.PHWarehouse._lastOption == 1 && PHPlugins.PHWarehouse.checkCapacity()) {
                 return true;
@@ -1185,9 +1187,9 @@ PHPlugins.Params.PHWarehouseStackItemQuantity = Boolean(PHPlugins.Params.PHWareh
         return false;
     };
 
-    Window_WarehouseItemList.prototype.makeWarehouseItemList = function() {
+    Window_WarehouseItemList.prototype.makeWarehouseItemList = function () {
         var data = PHPlugins.PHWarehouse.getItems();
-        this._data = data.filter(function(item) {
+        this._data = data.filter(function (item) {
             if (PHPlugins.Params.PHWarehouseAllTogether == true) {
                 return this.includesWarehouseAll(item);
             } else {
@@ -1199,15 +1201,15 @@ PHPlugins.Params.PHWarehouseStackItemQuantity = Boolean(PHPlugins.Params.PHWareh
         }
     };
 
-    Window_WarehouseItemList.prototype.includesWarehouseAll = function(item) {
-        return ( (DataManager.isItem(item) && item.itypeId === 1) || (DataManager.isWeapon(item)) || (DataManager.isArmor(item)) || (DataManager.isItem(item) && item.itypeId === 2) );
+    Window_WarehouseItemList.prototype.includesWarehouseAll = function (item) {
+        return ((DataManager.isItem(item) && item.itypeId === 1) || (DataManager.isWeapon(item)) || (DataManager.isArmor(item)) || (DataManager.isItem(item) && item.itypeId === 2));
     };
 
-    Window_WarehouseItemList.prototype.makeDepositAllItemList = function() {
+    Window_WarehouseItemList.prototype.makeDepositAllItemList = function () {
         this._data = $gameParty.allItems();
     };
 
-    Window_WarehouseItemList.prototype.loadItems = function() {
+    Window_WarehouseItemList.prototype.loadItems = function () {
 
         // Deposit
         if (PHPlugins.PHWarehouse._lastOption == 1) {
@@ -1225,7 +1227,7 @@ PHPlugins.Params.PHWarehouseStackItemQuantity = Boolean(PHPlugins.Params.PHWareh
 
     };
 
-    Window_WarehouseItemList.prototype.drawItem = function(index) {
+    Window_WarehouseItemList.prototype.drawItem = function (index) {
         var item = this._data[index];
         if (item) {
             var numberWidth = this.numberWidth();
@@ -1245,7 +1247,7 @@ PHPlugins.Params.PHWarehouseStackItemQuantity = Boolean(PHPlugins.Params.PHWareh
         }
     };
 
-    Window_WarehouseItemList.prototype.drawWarehouseItemNumber = function(item, x, y, width) {
+    Window_WarehouseItemList.prototype.drawWarehouseItemNumber = function (item, x, y, width) {
         var qtty = PHPlugins.PHWarehouse.getQuantity(item);
         if (typeof Yanfly !== "undefined") {
             this.contents.fontSize = Yanfly.Param.ItemQuantitySize;
@@ -1257,13 +1259,13 @@ PHPlugins.Params.PHWarehouseStackItemQuantity = Boolean(PHPlugins.Params.PHWareh
         }
     };
 
-    Window_WarehouseItemList.prototype.refresh = function() {
+    Window_WarehouseItemList.prototype.refresh = function () {
         this.contents.clear();
         this.loadItems();
         this.drawAllItems();
     };
 
-    Window_WarehouseItemList.prototype.moveItem = function() {
+    Window_WarehouseItemList.prototype.moveItem = function () {
 
         var item = this.item();
 
@@ -1296,7 +1298,7 @@ PHPlugins.Params.PHWarehouseStackItemQuantity = Boolean(PHPlugins.Params.PHWareh
 
     };
 
-    Window_WarehouseItemList.prototype.playOkSound = function() { };
+    Window_WarehouseItemList.prototype.playOkSound = function () { };
 
 
 
@@ -1306,13 +1308,13 @@ PHPlugins.Params.PHWarehouseStackItemQuantity = Boolean(PHPlugins.Params.PHWareh
     Window_WarehouseInfo.prototype = Object.create(Window_Base.prototype);
     Window_WarehouseInfo.prototype.constructor = Window_WarehouseInfo;
 
-    Window_WarehouseInfo.prototype.initialize = function() {
+    Window_WarehouseInfo.prototype.initialize = function () {
         Window_Base.prototype.initialize.call(this, 0, Graphics.boxHeight - this.fittingHeight(1), Graphics.boxWidth, this.fittingHeight(1));
         this.availableSpaceText = PHPlugins.Params.PHWarehouseAvailableSpaceText + " ";
         this.refresh();
     };
 
-    Window_WarehouseInfo.prototype.refresh = function() {
+    Window_WarehouseInfo.prototype.refresh = function () {
         this.contents.clear();
         this.availableSpaceValue = (PHPlugins.PHWarehouse._warehouses[PHPlugins.PHWarehouse._lastActive].maxCapacity - PHPlugins.PHWarehouse.getCurrentCapacity(PHPlugins.PHWarehouse._lastActive)) + " / " + PHPlugins.PHWarehouse._warehouses[PHPlugins.PHWarehouse._lastActive].maxCapacity;
         this.changeTextColor(this.normalColor());
@@ -1332,11 +1334,11 @@ PHPlugins.Params.PHWarehouseStackItemQuantity = Boolean(PHPlugins.Params.PHWareh
     Scene_Warehouse.prototype = Object.create(Scene_MenuBase.prototype);
     Scene_Warehouse.prototype.constructor = Scene_Warehouse;
 
-    Scene_Warehouse.prototype.initialize = function() {
+    Scene_Warehouse.prototype.initialize = function () {
         Scene_MenuBase.prototype.initialize.call(this);
     };
 
-    Scene_Warehouse.prototype.create = function() {
+    Scene_Warehouse.prototype.create = function () {
         Scene_MenuBase.prototype.create.call(this);
 
         this.createTitle();
@@ -1347,26 +1349,26 @@ PHPlugins.Params.PHWarehouseStackItemQuantity = Boolean(PHPlugins.Params.PHWareh
 
     };
 
-    Scene_Warehouse.prototype.createTitle = function() {
+    Scene_Warehouse.prototype.createTitle = function () {
         this._titleWindow = new Window_WarehouseTitle();
         this.addWindow(this._titleWindow);
     };
 
-    Scene_Warehouse.prototype.createOptions = function() {
+    Scene_Warehouse.prototype.createOptions = function () {
         this._optionWindow = new Window_WarehouseOption();
         this._optionWindow.setHandler('cancel', this.popScene.bind(this));
         this._optionWindow.setHandler('ok', this.onOptionOk.bind(this));
         this.addWindow(this._optionWindow);
     };
 
-    Scene_Warehouse.prototype.createCategory = function() {
+    Scene_Warehouse.prototype.createCategory = function () {
         this._categoryWindow = new Window_WarehouseCategory();
         this._categoryWindow.setHandler('cancel', this.onCategoryCancel.bind(this));
         this._categoryWindow.setHandler('ok', this.onCategoryOk.bind(this));
         this.addWindow(this._categoryWindow);
     };
 
-    Scene_Warehouse.prototype.createItemList = function() {
+    Scene_Warehouse.prototype.createItemList = function () {
         this._itemWindow = new Window_WarehouseItemList();
         this._itemWindow.setHandler('ok', this.onItemOk.bind(this));
         this._itemWindow.setHandler('cancel', this.onItemCancel.bind(this));
@@ -1374,19 +1376,19 @@ PHPlugins.Params.PHWarehouseStackItemQuantity = Boolean(PHPlugins.Params.PHWareh
         this._categoryWindow.setItemWindow(this._itemWindow);
     };
 
-    Scene_Warehouse.prototype.createInfoLocation = function() {
+    Scene_Warehouse.prototype.createInfoLocation = function () {
         this._infoLocationWindow = new Window_WarehouseInfo();
         this.addWindow(this._infoLocationWindow);
     };
 
-    Scene_Warehouse.prototype.onOptionOk = function() {
+    Scene_Warehouse.prototype.onOptionOk = function () {
         this._optionWindow.changeOption();
         this._categoryWindow.activate();
         this._categoryWindow.select(0);
         this._optionWindow.deactivate();
     };
 
-    Scene_Warehouse.prototype.onCategoryOk = function() {
+    Scene_Warehouse.prototype.onCategoryOk = function () {
         this._itemWindow.activate();
         if (this._itemWindow._data.length > 0) {
             this._itemWindow.select(0);
@@ -1394,17 +1396,17 @@ PHPlugins.Params.PHWarehouseStackItemQuantity = Boolean(PHPlugins.Params.PHWareh
         this._categoryWindow.deactivate();
     };
 
-    Scene_Warehouse.prototype.onCategoryCancel = function() {
+    Scene_Warehouse.prototype.onCategoryCancel = function () {
         this._categoryWindow.deselect();
         this._optionWindow.activate();
     };
 
-    Scene_Warehouse.prototype.onItemCancel = function() {
+    Scene_Warehouse.prototype.onItemCancel = function () {
         this._itemWindow.deselect();
         this._categoryWindow.activate();
     };
 
-    Scene_Warehouse.prototype.onItemOk = function() {
+    Scene_Warehouse.prototype.onItemOk = function () {
         this._itemWindow.moveItem();
         this._infoLocationWindow.refresh();
         this._itemWindow.activate();
