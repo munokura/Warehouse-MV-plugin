@@ -135,8 +135,8 @@ Rule Commands:
  * @plugindesc アイテムを保管できる倉庫を作成できます。
  *
  * @author PrimeHover
- * @version 1.2.1
- * @date 05/30/2016
+ * @version 1.2.2
+ * @date 2020/07/07
  * 
  * @param ---オプション---
  * @desc プラグインのオプションをカスタマイズしてください
@@ -191,9 +191,6 @@ Rule Commands:
  * 翻訳:ムノクラ
  * https://fungamemake.com/
  * https://twitter.com/munokura/
- * 
- * 注意事項
- * このプラグインは導入前のセーブデータをロードすると、エラーが起きます。
  *
  * ---------------------------------------------------------------------------
  *
@@ -958,7 +955,8 @@ PHPlugins.Params.PHWarehouseStackItemQuantity = Boolean(PHPlugins.Params.PHWareh
     DataManager.extractSaveContents = function (contents) {
         _DataManager_extractSaveContents_.call(this, contents);
         PHPlugins.PHWarehouse = new PHWarehouseManager();
-        PHPlugins.PHWarehouse._warehouses = contents.phwarehouse;
+        // PHPlugins.PHWarehouse._warehouses = contents.phwarehouse;    セーブデータ対応変更 by DarkPlasma
+        PHPlugins.PHWarehouse._warehouses = contents.phwarehouse || {};
         PHPlugins.PHWarehouse.loadRules();
     };
 
