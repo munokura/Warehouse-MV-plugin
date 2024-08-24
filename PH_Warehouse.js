@@ -3,7 +3,7 @@
  PH - Warehouse/Storage
  @plugindesc This plugin allows the creation of warehouses where you can store items in the game.
  @author PrimeHover
- @version 1.2.2
+ @version 1.2.3
  @date 2020/07/07
  --------------------------------------------------------------------------------
  This work is licensed under the Creative Commons Attribution 4.0 International License.
@@ -134,7 +134,7 @@ Rule Commands:
  * @plugindesc アイテムを保管できる倉庫を作成できます。
  *
  * @author PrimeHover
- * @version 1.2.2
+ * @version 1.2.3
  * @date 2020/07/07
  * 
  * @param ---オプション---
@@ -1315,7 +1315,7 @@ PHPlugins.Params.PHWarehouseStackItemQuantity = Boolean(PHPlugins.Params.PHWareh
         this.contents.clear();
         this.availableSpaceValue = (PHPlugins.PHWarehouse._warehouses[PHPlugins.PHWarehouse._lastActive].maxCapacity - PHPlugins.PHWarehouse.getCurrentCapacity(PHPlugins.PHWarehouse._lastActive)) + " / " + PHPlugins.PHWarehouse._warehouses[PHPlugins.PHWarehouse._lastActive].maxCapacity;
         this.changeTextColor(this.normalColor());
-        this.drawText(this.availableSpaceText + this.availableSpaceValue, 0, 0, this.x);
+        this.drawText(this.availableSpaceText + this.availableSpaceValue, 0, 0, this.width);    //fix 1.2.3
     };
 
 
